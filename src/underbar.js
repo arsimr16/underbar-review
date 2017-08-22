@@ -187,6 +187,20 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    /*return _.reduce(collection, function(value) {
+      //debugger;
+      return iterator(value);
+    }, true);
+    */
+    _.each(collection, function(value) {
+      console.log('value: ' + value);
+      if (!iterator(value)) {
+        console.log('false!');
+        return false;
+      }
+    });
+    console.log('------');
+    return true;
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
@@ -215,6 +229,8 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    var destination = obj;
+    var sources = Array.from(arguments).slice(1);
   };
 
   // Like extend, but doesn't ever overwrite a key that already
