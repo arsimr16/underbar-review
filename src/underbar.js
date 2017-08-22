@@ -233,6 +233,13 @@
   _.extend = function(obj) {
     var destination = obj;
     var sources = Array.from(arguments).slice(1);
+
+    _.each(sources, function(sourceObj) {
+      for (var key in sourceObj) {
+        destination[key] = sourceObj[key];
+      }
+    });
+    return destination;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
