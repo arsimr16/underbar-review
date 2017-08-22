@@ -143,19 +143,19 @@
   // Reduces an array or object to a single value by repetitively calling
   // iterator(accumulator, item) for each item. accumulator should be
   // the return value of the previous iterator call.
-  //  
+  //
   // You can pass in a starting value for the accumulator as the third argument
   // to reduce. If no starting value is passed, the first element is used as
   // the accumulator, and is never passed to the iterator. In other words, in
   // the case where a starting value is not passed, the iterator is not invoked
   // until the second element, with the first element as its second argument.
-  //  
+  //
   // Example:
   //   var numbers = [1,2,3];
   //   var sum = _.reduce(numbers, function(total, number){
   //     return total + number;
   //   }, 0); // should be 6
-  //  
+  //
   //   var identity = _.reduce([5], function(total, number){
   //     return total + number * number;
   //   }); // should be 5, regardless of the iterator function passed in
@@ -187,26 +187,28 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
-    /*return _.reduce(collection, function(value) {
-      //debugger;
-      return iterator(value);
-    }, true);
-    */
-    _.each(collection, function(value) {
-      console.log('value: ' + value);
-      if (!iterator(value)) {
-        console.log('false!');
-        return false;
+    if (!iterator) {
+      var iterator = function(value) { return Boolean(value); };
+    }
+    return _.reduce(collection, function(allSame, element) {
+      if (allSame) {
+        allSame = Boolean(iterator(element));
       }
-    });
-    console.log('------');
-    return true;
+      return allSame;
+    }, true);
+
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    return !_.every(collection, function(element) {
+      if (iterator) {
+        return !iterator(element);
+      }
+      return !Boolean(element);
+    });
   };
 
 
