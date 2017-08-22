@@ -245,6 +245,17 @@
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    var destination = obj;
+    var sources = Array.from(arguments).slice(1);
+
+    _.each(sources, function(sourceObj) {
+      for (var key in sourceObj) {
+        if (!destination.hasOwnProperty(key)) {
+          destination[key] = sourceObj[key];
+        }
+      }
+    });
+    return destination;
   };
 
 
@@ -288,6 +299,14 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var prevCalled = {};
+    return function() {
+      var args = JSON.stringify(arguments);
+      if (!prevCalled.hasOwnProperty(args)) {
+        prevCalled[args] = func.apply(this, arguments);
+      } 
+      return prevCalled[args];
+    };
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -297,6 +316,11 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = Array.from(arguments).slice(2);
+    var delayedFunction = function() {
+      func.apply(this, args);
+    };
+    setTimeout(delayedFunction, wait);
   };
 
 
@@ -311,6 +335,7 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    
   };
 
 
